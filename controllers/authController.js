@@ -1,4 +1,3 @@
-// const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { loginSchema, registerSchema } = require("../middlewares/schemaValidator");
 const User = require("../models/user");
@@ -23,12 +22,12 @@ const login = async (req, res) => {
     email: userExists.email,
     role: userExists.role,
   };
-  const token = jwt.sign(userData, process.env.SECRET, { expiresIn: "3h" });
+  const token = jwt.sign(userData, process.env.SECRET, { expiresIn: "24h" });
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   return res.status(200).json({

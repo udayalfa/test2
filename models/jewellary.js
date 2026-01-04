@@ -6,6 +6,10 @@ const jewellerySchema = new mongoose.Schema({
     required: true,
     trim: true, // removes extra spaces
   },
+  shortDescription: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
@@ -36,13 +40,15 @@ const jewellerySchema = new mongoose.Schema({
   },
   purity: {
     type: String, // e.g. "22K", "18K", "925 Silver"
+    enum : ["22K", "18K", "925 Silver"],
     required: true,
   },
   weight: {
-    type: String, // "15g", "10.5g" etc
+    type: Number, // "15g", "10.5g" etc
   },
   stoneType: {
-    type: String, // "Diamond", "Ruby", "Emerald", etc.
+    type: String,
+    enum : ["Diamond", "Ruby", "Emerald", "Kundan", "Others"] // "Diamond", "Ruby", "Emerald", etc.
   },
   images: {
     type: [String], // store image URLs (from Cloudinary or other)
@@ -58,4 +64,6 @@ const jewellerySchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Jewellery", jewellerySchema);
+const Jewellery = mongoose.model("Jewellery", jewellerySchema);
+
+export default Jewellery;
