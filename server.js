@@ -8,10 +8,12 @@ const mainRouter = require("./routes/mainRouter");
 require("dotenv").config();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173","https://abnashjewels.vercel.app"],
+    credentials: true,
+  })
+);
 connectDB();
 app.use("/api/v1", mainRouter);
 const PORT = process.env.PORT || 5000;
