@@ -120,6 +120,25 @@ export const getJewelleryById = async (req, res) => {
   }
 };
 
+export const getHomeJewellery = async (req, res) => {
+  try {
+    const limit = 10;
+    const products = await Jewellery.aggregate([{ $sample: { size: limit } }]);
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch home jewellery",
+    });
+  }
+};
+
 // ================= DELETE JEWELLERY =================
 export const deleteJewellery = async (req, res) => {
   try {
@@ -153,7 +172,6 @@ export const getJewelleryByCategory = async (req, res) => {
     }
 
     const jewellery = await Jewellery.find({ category })
-      .select("name shortDescription weight images") // fetch only needed fields
       .lean()
       .sort({
         createdAt: -1,

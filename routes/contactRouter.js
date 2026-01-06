@@ -1,5 +1,9 @@
-import express from "express"
-import { sendBuildYourOwn , sendContactMail, sendOrderMail } from "../controllers/contactController.js";
+import express from "express";
+import {
+  sendBuildYourOwn,
+  sendContactMail,
+  sendOrderMail,
+} from "../controllers/contactController.js";
 import upload from "../middlewares/upload.js";
 
 const contactRouter = express.Router();
