@@ -107,7 +107,9 @@ export const sendBuildYourOwn = async (req, res) => {
                 <tr><td><b>Name</b></td><td>${name}</td></tr>
                 <tr><td><b>Email</b></td><td>${email}</td></tr>
                 <tr><td><b>Phone</b></td><td>${phone || "N/A"}</td></tr>
-                <tr><td><b>Jewelry Type</b></td><td>${jewelryType || "N/A"}</td></tr>
+                <tr><td><b>Jewelry Type</b></td><td>${
+                  jewelryType || "N/A"
+                }</td></tr>
               </table>
 
               <div style="margin-top:20px;">
@@ -150,3 +152,98 @@ export const sendBuildYourOwn = async (req, res) => {
   }
 };
 
+export const sendOrderMail = async (req, res) => {
+  try {
+    const { cartProducts, formData } = req.body;
+    const { name, email, phone, address } = formData || {};
+
+    if (!name || !phone || !address || !cartProducts?.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Required fields missing",
+      });
+    }
+
+    const productHTML = cartProducts
+      .map(
+        (item) => `
+        <tr>
+          <td style="padding:10px;border-bottom:1px solid #eee;">
+            <a href="${item.product.images[0]}" target="_blank">
+             <img src="${item.product.images[0]}" width="120" />
+           </a>
+          </td>
+          <td style="padding:10px;border-bottom:1px solid #eee;">
+            <strong>${item.product.name}</strong><br/>
+            <small>ID: ${item.product._id}</small>
+          </td>
+          <td style="padding:10px;border-bottom:1px solid #eee;text-align:center;">
+            ${item.totalItems}
+          </td>
+        </tr>
+      `
+      )
+      .join("");
+
+    await resend.emails.send({
+      from: "New Order <onboarding@resend.dev>",
+      to: [process.env.EMAIL_USER],
+      replyTo: email,
+      subject: "🛒 New Order Request",
+      html: `
+      <div style="font-family:'Segoe UI',Arial,sans-serif;background:#f6f6f6;padding:30px;">
+        <div style="max-width:700px;margin:auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <div style="background:#000;padding:20px;text-align:center;">
+            <h1 style="margin:0;color:#fff;">New Order Request</h1>
+            <p style="margin:5px 0 0;color:#ccc;font-size:14px;">Website Cart Order</p>
+          </div>
+
+          <!-- Customer Info -->
+          <div style="padding:25px;">
+            <h3 style="margin-bottom:10px;color:#000;">Customer Details</h3>
+            <table width="100%">
+              <tr><td><b>Name</b></td><td>${name}</td></tr>
+              <tr><td><b>Email</b></td><td>${email || "N/A"}</td></tr>
+              <tr><td><b>Phone</b></td><td>${phone}</td></tr>
+              <tr><td><b>Address</b></td><td>${address}</td></tr>
+            </table>
+
+            <!-- Products -->
+            <h3 style="margin-top:25px;color:#000;">Ordered Products</h3>
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <thead>
+                <tr style="background:#fafafa;">
+                  <th align="left" style="padding:10px;">Image</th>
+                  <th align="left" style="padding:10px;">Product</th>
+                  <th align="center" style="padding:10px;">Qty</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${productHTML}
+              </tbody>
+            </table>
+          </div>
+
+          <div style="background:#fafafa;padding:15px;text-align:center;font-size:12px;color:#777;">
+            This order request was sent from your website cart.
+          </div>
+
+        </div>
+      </div>
+      `,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Order request sent successfully",
+    });
+  } catch (error) {
+    console.error("Order mail error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send order mail",
+    });
+  }
+};
