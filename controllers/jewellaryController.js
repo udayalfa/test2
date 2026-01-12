@@ -171,19 +171,9 @@ export const getJewelleryByCategory = async (req, res) => {
       });
     }
 
-    const jewellery = await Jewellery.find({ category })
-      .lean()
-      .sort({
-        createdAt: -1,
-      });
-
-    if (jewellery.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: `No jewellery found for category: ${category}`,
-      });
-    }
-
+    const jewellery = await Jewellery.find({ category }).lean().sort({
+      createdAt: -1,
+    });
     res.status(200).json({
       success: true,
       count: jewellery.length,
@@ -213,13 +203,6 @@ export const getFullJewelleryByCategory = async (req, res) => {
     const jewellery = await Jewellery.find({ category }).lean().sort({
       createdAt: -1,
     });
-
-    if (jewellery.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: `No jewellery found for category: ${category}`,
-      });
-    }
     res.status(200).json({
       success: true,
       count: jewellery.length,

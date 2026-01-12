@@ -6,7 +6,7 @@ export const jewelleryValidation = Joi.object({
     "string.min": "Name must be at least 2 characters",
     "any.required": "Name is required",
   }),
-   shortDescription: Joi.string().trim().min(50).max(70).required().messages({
+   shortDescription: Joi.string().trim().min(30).max(70).required().messages({
     "string.empty": "Description is required",
     "string.min": "Description must be at least 50 characters",
     "string.max": "Description must be at max 70 characters",

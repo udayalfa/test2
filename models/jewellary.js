@@ -40,7 +40,7 @@ const jewellerySchema = new mongoose.Schema({
   },
   purity: {
     type: String, // e.g. "22K", "18K", "925 Silver"
-    enum : ["22K", "18K", "925 Silver"],
+    enum: ["22K", "18K", "925 Silver"],
     required: true,
   },
   weight: {
@@ -48,7 +48,7 @@ const jewellerySchema = new mongoose.Schema({
   },
   stoneType: {
     type: String,
-    enum : ["Diamond", "Ruby", "Emerald", "Kundan", "Others"] // "Diamond", "Ruby", "Emerald", etc.
+    enum: ["Diamond", "Ruby", "Emerald", "Kundan", "Others"], // "Diamond", "Ruby", "Emerald", etc.
   },
   images: {
     type: [String], // store image URLs (from Cloudinary or other)
