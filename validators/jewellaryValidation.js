@@ -6,7 +6,7 @@ export const jewelleryValidation = Joi.object({
     "string.min": "Name must be at least 2 characters",
     "any.required": "Name is required",
   }),
-   shortDescription: Joi.string().trim().min(30).max(70).required().messages({
+  shortDescription: Joi.string().trim().min(30).max(70).required().messages({
     "string.empty": "Description is required",
     "string.min": "Description must be at least 50 characters",
     "string.max": "Description must be at max 70 characters",
@@ -15,7 +15,7 @@ export const jewelleryValidation = Joi.object({
   description: Joi.string().trim().min(300).max(400).required().messages({
     "string.empty": "Description is required",
     "string.min": "Description must be at least 300 characters",
-    "string.max": "Description must be at max 400 characters",
+    "string.max": "Description must be at max 500 characters",
     "any.required": "Description is required",
   }),
 
@@ -28,7 +28,7 @@ export const jewelleryValidation = Joi.object({
       "Anklet",
       "Pendant",
       "Chain",
-      "Other"
+      "Other",
     )
     .required()
     .messages({
@@ -51,19 +51,14 @@ export const jewelleryValidation = Joi.object({
       "string.empty": "Metal type is required",
       "any.required": "Metal type is required",
     }),
-
-  purity: Joi.string().valid("22K", "18K", "925 Silver").required().messages({
-    "any.only": "Purity is required",
-    "string.empty": "Purity is required",
-    "any.required": "Purity is required",
-  }),
-
-  weight: Joi.number().positive().required().messages({
-    "number.base": "Weight must be a number",
-    "number.positive": "Weight must be positive",
-    "any.required": "Weight is required",
-  }),
-
+  purity: Joi.string()
+    .valid("22K", "18K", "925 Silver", "14K", "18 & 22K")
+    .required()
+    .messages({
+      "any.only": "Purity is required",
+      "string.empty": "Purity is required",
+      "any.required": "Purity is required",
+    }),
   stoneType: Joi.string()
     .valid("Diamond", "Ruby", "Emerald", "Kundan", "Others")
     .required()
@@ -72,11 +67,4 @@ export const jewelleryValidation = Joi.object({
       "string.empty": "Stone type is required",
       "any.required": "Stone type is required",
     }),
-
-  stock: Joi.number().integer().min(0).required().messages({
-    "number.base": "Stock must be a number",
-    "number.integer": "Stock must be an integer",
-    "number.min": "Stock cannot be negative",
-    "any.required": "Stock is required",
-  }),
 });

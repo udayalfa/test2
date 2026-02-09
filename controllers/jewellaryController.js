@@ -11,9 +11,7 @@ export const createJewellery = async (req, res) => {
     gender,
     metalType,
     purity,
-    weight,
     stoneType,
-    stock,
   } = req.body;
   try {
     // 1️⃣ Validate request body
@@ -26,9 +24,7 @@ export const createJewellery = async (req, res) => {
         gender,
         metalType,
         purity,
-        weight,
         stoneType,
-        stock,
       },
       {
         abortEarly: false,
@@ -73,9 +69,7 @@ export const createJewellery = async (req, res) => {
       gender,
       metalType,
       purity,
-      weight, // store as string or number based on your schema
       stoneType,
-      stock,
       images: imageUrls,
     });
 
@@ -122,7 +116,7 @@ export const getJewelleryById = async (req, res) => {
 
 export const getHomeJewellery = async (req, res) => {
   try {
-    const limit = 10;
+    const limit = 12;
     const products = await Jewellery.aggregate([{ $sample: { size: limit } }]);
 
     res.status(200).json({
@@ -262,9 +256,7 @@ export const updateJewellery = async (req, res) => {
       "gender",
       "metalType",
       "purity",
-      "weight",
       "stoneType",
-      "stock",
     ];
 
     updatableFields.forEach((field) => {
